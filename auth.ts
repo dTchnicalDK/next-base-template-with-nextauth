@@ -11,4 +11,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   adapter: PrismaAdapter(prisma),
+  callbacks: {
+    async session({ session, user }) {
+      session.user.id = user.id; // now available as session.user.id
+      return session;
+    },
+  },
 });
