@@ -13,7 +13,7 @@ const DashboardPage = async () => {
       <div>
         <div>
           <Image
-            src={session.user?.image ?? ""}
+            src={session.user?.image ?? "globe.svg"}
             alt="usrPhoto"
             width={200}
             height={250}
