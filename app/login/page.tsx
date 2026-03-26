@@ -1,11 +1,13 @@
 "use client";
-import React from "react";
-import { signIn } from "next-auth/react";
-import { handleLogin } from "@/lib/actions/credetial-login.action";
+import React, { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { handleLogin } from "@/lib/actions/validations/auth.action";
+import { signIn } from "next-auth/react";
 
 const LoginPage = () => {
+  const [state, formAction, isPending] = useActionState(handleLogin, null);
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md p-8 space-y-6 bg-gray-700 rounded-xl shadow text-center">
@@ -36,25 +38,52 @@ const LoginPage = () => {
         {/* credetial login ui */}
         <div className="py-10 space-y-10 border-t border-b border-amber-100 rounded-2xl shadow-xl">
           <h1>Your may Login using Email and Password</h1>
-          <form action={handleLogin}>
+
+          {/* global error for auth */}
+          {state?.message && (
+            <p className="text-red-400 text-sm bg-red-950 px-4 py-2 rounded">
+              {state.message}
+            </p>
+          )}
+
+          <form action={formAction}>
             <div className="flex flex-col gap-5">
+              {/* email */}
               <div>
                 <Input
                   name="email"
-                  type="text"
+                  type="email"
                   placeholder="email i.e test@gmail.com"
+                  className={state?.errors?.email ? "border-red-500" : ""}
                 />
+                {state?.errors?.email && (
+                  <p className="text-red-400 text-xs mt-1">
+                    {state.errors.email[0]}
+                  </p>
+                )}
               </div>
+
+              {/* password block */}
               <div>
                 <Input
                   name="password"
                   type="password"
                   placeholder="enter password"
+                  className={state?.errors?.password ? "border-red-500" : ""}
                 />
+                {state?.errors?.password && (
+                  <p className="text-red-400 text-xs mt-1">
+                    {state.errors.password[0]}
+                  </p>
+                )}
               </div>
               <div>
-                <Button type="submit" className="cursor-pointer w-full mt-15">
-                  Login
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  className="cursor-pointer w-full mt-15"
+                >
+                  {isPending ? "SigningIn..." : "Login"}
                 </Button>
               </div>
             </div>
