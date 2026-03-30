@@ -11,9 +11,10 @@ const DashboardPage = async () => {
   if (!session) redirect("/login");
   return (
     <div>
+      {/* //remove the div and designe as you want the dashboard */}
       Dashboard page
-      <div>
-        <div className="relative w-36 h-36">
+      <div className="max-w-screen flex flex-col justify-center items-center">
+        <div className="relative w-36 h-36 ">
           <Image
             src={session.user?.image ?? "/profile.png"}
             alt="usrPhoto"
@@ -25,9 +26,6 @@ const DashboardPage = async () => {
         </div>
         <h1>welcome Mr. {session.user?.name}</h1>
         <h1>welcome Mr. {session.user?.email}</h1>
-        <form action={handleLogOut}>
-          <Button type="submit">signOut</Button>
-        </form>
       </div>
     </div>
   );
